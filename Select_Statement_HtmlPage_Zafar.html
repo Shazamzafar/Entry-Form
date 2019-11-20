@@ -1,0 +1,171 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <!--Name:       Shazam Zafar
+    Class:      JavaScript
+    Date:       Ooctber 12, 2019
+    Project:    Add ObjectToArray-->
+
+    <title>Allow the user to add student </title>
+    <meta charset="utf-8" />
+</head>
+<body onload="AddListeners()" style="background-color:burlywood">
+    <form>
+
+        <!-- call AddListeners function -->
+        <font color="#122086"> <h1> Welcome To My Website</h1> </font>
+
+        <img src="Pics/RReadyslider.jpg" height="200" width="400" />
+        <font color="#495895"> <h2> Would You Like To Add Students???</h2> </font>
+
+        <h3><font color="#07421C">  Student ID: <input id="Text1" type="text" /> </font></h3><!--TextBox For Student ID-->
+
+        <h3> <font color="#C80B0B"> Student Name: <input id="Text2" type="text" /></font></h3><!--TextBox For  Student Name-->
+
+        <select id="Select1">
+            <option>Select Rank</option>
+            <option>Freshman</option>
+            <option>Sophomore</option>
+            <option>Junior</option>
+            <option>Senior</option>
+        </select>
+
+
+        <h3><font color="#B80EEE"> GPA: <input id="Text4" type="text" />  </font> </h3>    <!--TextBox For GPA-->
+        <br />
+        <h1> <font color="red"> <div id="StuffImDisplaying"></div> </font></h1>
+
+        <input id="Button1" type="button" value="Create a Student" onclick="MakeStudent()" onmouseover="ChangeButtonText()" onmouseout="ChangeButtonBack()" /> <!--Button For Create a Student ( Press Ok Button 2x to Enter) -->
+        <font color="#138171"> <h3> Thank You For Your Time :)</h3> </font>
+        <script>
+
+            // Variable for entries
+            var studentId;
+            var studentName;
+            var studentRank;
+            var studentGpa;
+            var allStuff = [];
+            // function for Listeners
+            function AddListeners() {
+                studentId = document.querySelector("#Text1")
+                studentName = document.querySelector("#Text2")
+                studentRank = document.querySelector("#Select1")
+                studentGpa = document.querySelector("#Text4")
+                // Changing color &  //change the color back
+                studentId.addEventListener("mouseenter", ChangeColor);
+                studentId.addEventListener("mouseleave", ChangeColorBack);
+
+                studentName.addEventListener("mouseenter", ChangeColor);
+                studentName.addEventListener("mouseleave", ChangeColorBack);
+
+                studentRank.addEventListener("mouseenter", ChangeColor);
+                studentRank.addEventListener("mouseleave", ChangeColorBack);
+
+                studentGpa.addEventListener("mouseenter", ChangeColor);
+                studentGpa.addEventListener("mouseleave", ChangeColorBack);
+                // allowing only 0 through 9 and the decimal point.
+                studentGpa.addEventListener("change", showKey)
+
+            }
+            // functions for chaning the button back and for
+            function ChangeButtonText() {
+                document.getElementById("Button1").value = "Ive changed";
+            }
+
+            function ChangeButtonBack() {
+                document.getElementById("Button1").value = "Ive changed back.";
+            }
+
+            // chaning the color to yellow function
+            function ChangeColor() {
+
+                studentId.style.backgroundColor = "yellow";
+                studentName.style.backgroundColor = "yellow";
+                studentRank.style.backgroundColor = "yellow";
+                studentGpa.style.backgroundColor = "yellow";
+
+            }
+            // changing the color back to white
+            function ChangeColorBack() {
+                studentId.style.backgroundColor = "";
+                studentName.style.backgroundColor = "";
+                studentRank.style.backgroundColor = "";
+                studentGpa.style.backgroundColor = "";
+
+            }
+            // allow only 0 through 9 and the decimal point function
+            function showKey(e) {
+                if ((e.charCode < 48 || e.charCode > 57) && e.charCode != 46) {
+                    e.preventDefault();
+                }
+                if (e.target.value >= 0 && e.target.value < 10) {
+                    alert('valid input for gpa');
+                } else {
+                    e.target.value = "";
+                    alert('Please enter a valid number between 0-9')
+                }
+            }
+
+            // validation method that will make sure that student ID and name have
+            //been entered before attempting to add the student.
+            //It will also make sure the added GPA is 0 – 4 only
+            function MakeStudent() {
+                var errMsg = '';
+                var idExists = false;
+
+                if (studentId.value == "") {
+                    errMsg += 'Student Id cannot be blank.\n';
+                }
+                if (studentName.value == "") {
+                    errMsg += 'Student Name cannot be blank.\n';
+                }
+                if (studentGpa.value == "") {
+                    errMsg += 'Student GPA cannot be blank.\n';
+                }
+                if (errMsg.length == 0) {
+                    allStuff.forEach(function (i) {
+                        if (studentId.value == i.ID) {
+                            idExists = true;
+                            return;
+                        }
+                    });
+                    if (!idExists) {
+                        if (studentGpa.value >= 0 && studentGpa.value <= 4) {
+                            alert('valid gpa value');
+                            var anObject = {
+                                ID: studentId.value,
+                                Name: studentName.value,
+                                Rank: studentRank.value,
+                                GPA: studentGpa.value
+                            };
+                            allStuff.push(anObject);
+                            DisplayStuff();
+                        } else {
+                            errMsg += 'Invalid gpa value; GPA must be between 0-4\n';
+                        }
+                    } else {
+                        errMsg += 'The student with the same Id has already registered.\n'; // unique in validation method. For Bonus Points :)
+                    }
+                }
+                if (errMsg.length > 0) {
+                    alert(errMsg);
+                }
+            }
+
+            function DisplayStuff() {
+                // first clear our div tag so it doesn't keep adding the same elements again
+                //each time the button is clicked.
+                var lastStudentIndex = allStuff.length - 1;
+                if (lastStudentIndex >= 0) {
+                    document.getElementById("StuffImDisplaying").innerHTML += '<div>' + allStuff[lastStudentIndex].ID + ' ' + allStuff[lastStudentIndex].Name + ' ' + allStuff[lastStudentIndex].Rank + ' ' + allStuff[lastStudentIndex].GPA + '</div><br/>' ;
+                }
+                // displaying the listboxes
+                var e = document.getElementById("Select1");
+                var value = e.options[e.selectedIndex].value;
+                var text = e.options[e.selectedIndex].text
+            }
+        </script>
+    </form>
+
+</body>
+</html>
